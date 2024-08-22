@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,5 +30,27 @@
         </table>
         <a href="{{ url_for('create_class') }}" class="btn btn-primary">Criar Sala de Aula</a>
     </div>
+
+    <!-- dashboard.html -->
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.username }}</td>
+            <td>
+                <form action="{{ url_for('delete_student', student_id=student.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>

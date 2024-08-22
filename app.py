@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_bootstrap import Bootstrap
-from models import db, User, Class
+from models import db, User, Class, ClassStudent
 import os
 
 app = Flask(__name__)
@@ -65,7 +65,8 @@ def create_class():
             db.session.commit()
             for student_id in student_ids:
                 student = User.query.get(student_id)
-                new_class.students.append(student)
+                class_student = ClassStudent(class_id=new_class.id, student_id=student.id)
+                db.session.add(class_student)
             db.session.commit()
             return redirect(url_for('dashboard'))
         students = User.query.filter_by(role='aluno').all()
@@ -77,6 +78,16 @@ def classes():
     if 'user_id' in session and session['user_role'] == 'aluno':
         classes = Class.query.all()
         return render_template('classes.html', classes=classes)
+    return redirect(url_for('login'))
+
+@app.route('/delete_student/<int:student_id>', methods=['POST'])
+def delete_student(student_id):
+    if 'user_id' in session and session['user_role'] == 'professor':
+        student = User.query.get(student_id)
+        if student:
+            db.session.delete(student)
+            db.session.commit()
+        return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
