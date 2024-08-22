@@ -50,7 +50,26 @@ def register():
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' in session and session['user_role'] == 'professor':
-        return render_template('dashboard.html')
+        students = User.query.filter_by(role='aluno').all()
+        return render_template('dashboard.html', students=students)
+    return redirect(url_for('login'))
+
+@app.route('/create_class', methods=['GET', 'POST'])
+def create_class():
+    if 'user_id' in session and session['user_role'] == 'professor':
+        if request.method == 'POST':
+            class_name = request.form['class_name']
+            student_ids = request.form.getlist('students')
+            new_class = Class(name=class_name)
+            db.session.add(new_class)
+            db.session.commit()
+            for student_id in student_ids:
+                student = User.query.get(student_id)
+                new_class.students.append(student)
+            db.session.commit()
+            return redirect(url_for('dashboard'))
+        students = User.query.filter_by(role='aluno').all()
+        return render_template('create_class.html', students=students)
     return redirect(url_for('login'))
 
 @app.route('/classes')

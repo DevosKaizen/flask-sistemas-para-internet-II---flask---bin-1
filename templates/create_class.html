@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Sala de Aula</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Criar Sala de Aula</h1>
+        <form method="POST" action="{{ url_for('create_class') }}">
+            <div class="form-group">
+                <label for="class_name">Nome da Sala</label>
+                <input type="text" class="form-control" id="class_name" name="class_name" required>
+            </div>
+            <div class="form-group">
+                <label for="students">Selecionar Alunos</label>
+                <select multiple class="form-control" id="students" name="students">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Criar</button>
+        </form>
+    </div>
+</body>
+</html>

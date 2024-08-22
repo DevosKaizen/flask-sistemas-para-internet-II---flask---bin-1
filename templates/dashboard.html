@@ -9,7 +9,26 @@
 <body>
     <div class="container">
         <h1>Dashboard do Professor</h1>
-        <p>Aqui você pode criar e gerenciar suas aulas.</p>
+        <h2>Alunos Cadastrados</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.username }}</td>
+                    <td>{{ student.role }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('create_class') }}" class="btn btn-primary">Criar Sala de Aula</a>
     </div>
 </body>
 </html>
