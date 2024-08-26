@@ -17,3 +17,5 @@ class ClassStudent(db.Model):
     __tablename__ = 'class_student'
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'), primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+    
