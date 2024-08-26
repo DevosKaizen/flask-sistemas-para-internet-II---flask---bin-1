@@ -108,5 +108,13 @@ def delete_professor(professor_id):
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 
+@app.route('/clear_db', methods=['POST'])
+def clear_db():
+    if 'user_id' in session and session['user_role'] == 'professor':
+        db.drop_all()
+        db.create_all()
+        return redirect(url_for('dashboard'))
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True)

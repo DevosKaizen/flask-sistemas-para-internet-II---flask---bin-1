@@ -50,5 +50,18 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Botão para limpar banco de dados -->
+    <form id="clear-db-form" action="{{ url_for('clear_db') }}" method="post" style="display:inline;">
+        <button type="button" onclick="confirmClearDB()">Limpar Banco de Dados</button>
+    </form>
+
+    <script>
+        function confirmClearDB() {
+            if (confirm("Você tem certeza que deseja limpar o banco de dados? Esta ação não pode ser desfeita.")) {
+                document.getElementById('clear-db-form').submit();
+            }
+        }
+    </script>
 </body>
 </html>
