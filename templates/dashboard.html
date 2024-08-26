@@ -1,72 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <h2>Alunos</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Loop para listar todos os alunos -->
-            {% for student in students %}
-            <tr>
-                <td>{{ student.username }}</td>
-                <td>
-                    <!-- Formulário para excluir um aluno -->
-                    <form action="{{ url_for('delete_student', student_id=student.id) }}" method="post" style="display:inline;">
-                        <button type="submit">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <a href="{{ url_for('create_student') }}" class="btn btn-primary">Criar Aluno</a>
+        <a href="{{ url_for('create_class') }}" class="btn btn-secondary">Criar Sala de Aula</a>
+        <h2>Alunos</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.username }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_student', student_id=aluno.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Professores</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Loop para listar todos os professores -->
-            {% for professor in professors %}
-            <tr>
-                <td>{{ professor.username }}</td>
-                <td>
-                    <!-- Formulário para excluir um professor -->
-                    <form action="{{ url_for('delete_professor', professor_id=professor.id) }}" method="post" style="display:inline;">
-                        <button type="submit">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Turmas</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turma in turmas %}
+                <tr>
+                    <td>{{ turma.name }}</td>
+                    <td>
+                        <!-- Adicione ações para turmas se necessário -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <!-- Botão para limpar banco de dados -->
-    <form id="clear-db-form" action="{{ url_for('clear_db') }}" method="post" style="display:inline;">
-        <button type="button" onclick="confirmClearDB()">Limpar Banco de Dados</button>
-    </form>
+        <form id="clear-db-form" action="{{ url_for('clear_db') }}" method="post" style="display:inline;">
+            <button type="button" class="btn btn-warning" onclick="confirmClearDB()">Limpar Banco de Dados</button>
+        </form>
 
-    <script>
-        // Função para confirmar a limpeza do banco de dados
-        function confirmClearDB() {
-            if (confirm("Você tem certeza que deseja limpar o banco de dados? Esta ação não pode ser desfeita.")) {
-                document.getElementById('clear-db-form').submit();
+        <script>
+            function confirmClearDB() {
+                if (confirm("Você tem certeza que deseja limpar o banco de dados? Esta ação não pode ser desfeita.")) {
+                    document.getElementById('clear-db-form').submit();
+                }
             }
-        }
-    </script>
+        </script>
+    </div>
 </body>
 </html>
