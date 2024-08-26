@@ -44,7 +44,7 @@
             <tbody>
                 {% for turma in turmas %}
                 <tr>
-                    <td>{{ turma.name }}</td>
+                    <td><a href="{{ url_for('class_details', class_id=turma.id) }}">{{ turma.name }}</a></td>
                     <td>
                         <!-- Adicione ações para turmas se necessário -->
                     </td>

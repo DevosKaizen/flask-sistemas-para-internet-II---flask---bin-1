@@ -151,6 +151,35 @@ def create_student():
         return render_template('create_student.html')
     return redirect(url_for('login'))
 
+# Rota para visualizar detalhes da turma
+@app.route('/class/<int:class_id>', methods=['GET', 'POST'])
+def class_details(class_id):
+    if 'user_id' in session and session['user_role'] == 'professor':
+        turma = Turma.query.get(class_id)
+        if request.method == 'POST':
+            # Adicionar aluno à turma
+            student_id = request.form['student_id']
+            turma_aluno = TurmaAluno(turma_id=class_id, aluno_id=student_id)
+            db.session.add(turma_aluno)
+            db.session.commit()
+            return redirect(url_for('class_details', class_id=class_id))
+        alunos = Aluno.query.all()
+        return render_template('class_details.html', turma=turma, alunos=alunos)
+    return redirect(url_for('login'))
+
+# Rota para remover aluno da turma
+@app.route('/class/<int:class_id>/remove_student/<int:student_id>', methods=['POST'])
+def remove_student_from_class(class_id, student_id):
+    if 'user_id' in session and session['user_role'] == 'professor':
+        turma_aluno = TurmaAluno.query.filter_by(turma_id=class_id, aluno_id=student_id).first()
+        if turma_aluno:
+            db.session.delete(turma_aluno)
+            db.session.commit()
+        return redirect(url_for('class_details', class_id=class_id))
+    return redirect(url_for('login'))
+
+
+
 # Executa o aplicativo Flask
 if __name__ == '__main__':
     app.run(debug=True)
