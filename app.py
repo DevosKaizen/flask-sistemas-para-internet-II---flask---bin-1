@@ -51,7 +51,8 @@ def register():
 def dashboard():
     if 'user_id' in session and session['user_role'] == 'professor':
         students = User.query.filter_by(role='aluno').all()
-        return render_template('dashboard.html', students=students)
+        professors = User.query.filter_by(role='professor').all()
+        return render_template('dashboard.html', students=students, professors=professors)
     return redirect(url_for('login'))
 
 @app.route('/create_class', methods=['GET', 'POST'])
@@ -84,8 +85,18 @@ def classes():
 def delete_student(student_id):
     if 'user_id' in session and session['user_role'] == 'professor':
         student = User.query.get(student_id)
-        if student:
+        if student and student.role == 'aluno':
             db.session.delete(student)
+            db.session.commit()
+        return redirect(url_for('dashboard'))
+    return redirect(url_for('login'))
+
+@app.route('/delete_professor/<int:professor_id>', methods=['POST'])
+def delete_professor(professor_id):
+    if 'user_id' in session and session['user_role'] == 'professor':
+        professor = User.query.get(professor_id)
+        if professor and professor.role == 'professor':
+            db.session.delete(professor)
             db.session.commit()
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
