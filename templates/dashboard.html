@@ -16,10 +16,12 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Loop para listar todos os alunos -->
             {% for student in students %}
             <tr>
                 <td>{{ student.username }}</td>
                 <td>
+                    <!-- Formulário para excluir um aluno -->
                     <form action="{{ url_for('delete_student', student_id=student.id) }}" method="post" style="display:inline;">
                         <button type="submit">Excluir</button>
                     </form>
@@ -38,10 +40,12 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Loop para listar todos os professores -->
             {% for professor in professors %}
             <tr>
                 <td>{{ professor.username }}</td>
                 <td>
+                    <!-- Formulário para excluir um professor -->
                     <form action="{{ url_for('delete_professor', professor_id=professor.id) }}" method="post" style="display:inline;">
                         <button type="submit">Excluir</button>
                     </form>
@@ -57,6 +61,7 @@
     </form>
 
     <script>
+        // Função para confirmar a limpeza do banco de dados
         function confirmClearDB() {
             if (confirm("Você tem certeza que deseja limpar o banco de dados? Esta ação não pode ser desfeita.")) {
                 document.getElementById('clear-db-form').submit();
