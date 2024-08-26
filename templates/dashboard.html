@@ -34,10 +34,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('register') }}">Registrar</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('professor_dashboard') }}">Turmas</a>
+                </li>
             </ul>
         </div>
     </nav>
-
+    
     <div class="container">
         <h1>Dashboard</h1>
         
@@ -90,5 +93,6 @@
             </tbody>
         </table>
     </div>
+    <h2><a href="{{ url_for('professor_dashboard') }}" class="btn btn-info">Ver Turmas</a></h2>
 </body>
 </html>

@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <!-- Inclui o CSS do Bootstrap -->
+    <title>Painel do Professor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <a class="navbar-brand" href="{{ url_for('dashboard') }}">Sistema de Aulas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,12 +26,34 @@
             </ul>
         </div>
     </nav>
-    
+
     <div class="container">
-        <h1>Bem-vindo ao Sistema de Aulas</h1>
-        <!-- Links para as páginas de login e registro -->
-        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
-        <a href="{{ url_for('register') }}" class="btn btn-secondary">Registrar</a>
+        <h1>Painel do Professor</h1>
+        <h2>Turmas</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome da Turma</th>
+                    <th>Professor</th>
+                    <th>Alunos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turma in turmas %}
+                <tr>
+                    <td>{{ turma.name }}</td>
+                    <td>{{ turma.professor.username }}</td>
+                    <td>
+                        <ul>
+                            {% for aluno in turma.alunos %}
+                            <li>{{ aluno.username }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

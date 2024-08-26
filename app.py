@@ -181,14 +181,16 @@ def remove_student_from_class(class_id, student_id):
 # Rota para editar o nome da turma
 @app.route('/edit_class/<int:class_id>', methods=['GET', 'POST'])
 def edit_class(class_id):
-    with Session(db.engine) as session:
-        turma = session.get(Turma, class_id)
-        if request.method == 'POST':
-            turma.name = request.form['class_name']
-            session.commit()
-            flash('Nome da turma atualizado com sucesso!', 'success')
-            return redirect(url_for('dashboard'))
-    return render_template('edit_class.html', turma=turma)
+    turma = Turma.query.get(class_id)
+    professores = Professor.query.all()
+    
+    if request.method == 'POST':
+        turma.name = request.form['name']
+        turma.professor_id = request.form['professor_id']
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    
+    return render_template('edit_class.html', turma=turma, professores=professores)
 
 
 # Rota para editar o nome do aluno
@@ -213,6 +215,11 @@ def delete_class(class_id):
             session.commit()
             flash('Turma excluída com sucesso!', 'success')
     return redirect(url_for('dashboard'))
+
+@app.route('/professor_dashboard')
+def professor_dashboard():
+    turmas = Turma.query.all()
+    return render_template('professor_dashboard.html', turmas=turmas)
 
 # Executa o aplicativo Flask
 if __name__ == '__main__':
