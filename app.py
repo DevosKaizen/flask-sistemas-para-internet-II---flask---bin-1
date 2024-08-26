@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_bootstrap import Bootstrap
 from models import db, User, Class, ClassStudent
 import os
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -10,6 +11,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 Bootstrap(app)
 db.init_app(app)
+
+migrate = Migrate(app, db)  # Mova esta linha para depois da definição de `app`
 
 with app.app_context():
     db.create_all()
@@ -86,6 +89,8 @@ def delete_student(student_id):
     if 'user_id' in session and session['user_role'] == 'professor':
         student = User.query.get(student_id)
         if student and student.role == 'aluno':
+            # Remover todas as associações na tabela class_student
+            ClassStudent.query.filter_by(student_id=student_id).delete()
             db.session.delete(student)
             db.session.commit()
         return redirect(url_for('dashboard'))
@@ -96,6 +101,8 @@ def delete_professor(professor_id):
     if 'user_id' in session and session['user_role'] == 'professor':
         professor = User.query.get(professor_id)
         if professor and professor.role == 'professor':
+            # Remover todas as associações na tabela class_student
+            ClassStudent.query.filter_by(student_id=professor_id).delete()
             db.session.delete(professor)
             db.session.commit()
         return redirect(url_for('dashboard'))

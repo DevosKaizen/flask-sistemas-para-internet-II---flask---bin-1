@@ -18,4 +18,7 @@ class ClassStudent(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'), primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
-    
+
+# Verifique se a tabela class contém a coluna name
+columns = db.inspect(Class).columns
+print(columns)
