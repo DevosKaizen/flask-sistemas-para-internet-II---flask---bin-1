@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_bootstrap import Bootstrap
 from models import db, Professor, Aluno, Turma, TurmaAluno
 from flask_migrate import Migrate
-
+from sqlalchemy.orm import Session
 # Cria uma instância do Flask
 app = Flask(__name__)
 
@@ -178,7 +178,41 @@ def remove_student_from_class(class_id, student_id):
         return redirect(url_for('class_details', class_id=class_id))
     return redirect(url_for('login'))
 
+# Rota para editar o nome da turma
+@app.route('/edit_class/<int:class_id>', methods=['GET', 'POST'])
+def edit_class(class_id):
+    with Session(db.engine) as session:
+        turma = session.get(Turma, class_id)
+        if request.method == 'POST':
+            turma.name = request.form['class_name']
+            session.commit()
+            flash('Nome da turma atualizado com sucesso!', 'success')
+            return redirect(url_for('dashboard'))
+    return render_template('edit_class.html', turma=turma)
 
+
+# Rota para editar o nome do aluno
+@app.route('/edit_student/<int:student_id>', methods=['GET', 'POST'])
+def edit_student(student_id):
+    aluno = Aluno.query.get(student_id)
+    if request.method == 'POST':
+        aluno.username = request.form['username']
+        db.session.commit()
+        flash('Nome do aluno atualizado com sucesso!', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('edit_student.html', aluno=aluno)
+
+
+# Rota para excluir a turma
+@app.route('/delete_class/<int:class_id>', methods=['POST'])
+def delete_class(class_id):
+    with Session(db.engine) as session:
+        turma = session.get(Turma, class_id)
+        if turma:
+            session.delete(turma)
+            session.commit()
+            flash('Turma excluída com sucesso!', 'success')
+    return redirect(url_for('dashboard'))
 
 # Executa o aplicativo Flask
 if __name__ == '__main__':
