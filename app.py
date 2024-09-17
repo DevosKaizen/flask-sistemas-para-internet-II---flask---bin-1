@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Configurações do aplicativo Flask
 app.config['SECRET_KEY'] = 'your_secret_key'  # Chave secreta para sessões
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # URI do banco de dados
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # URI (configuração) do banco de dados
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Desativa o rastreamento de modificações do SQLAlchemy
 
 # Inicializa o Bootstrap com o aplicativo Flask
@@ -216,9 +216,9 @@ def delete_class(class_id):
             flash('Turma excluída com sucesso!', 'success')
     return redirect(url_for('dashboard'))
 
-@app.route('/professor_dashboard')
+@app.route('/professor_dashboard')  
 def professor_dashboard():
-    turmas = Turma.query.all()
+    turmas = Turma.query.all() # Busca todas as turmas no banco de dados
     return render_template('professor_dashboard.html', turmas=turmas)
 
 # Executa o aplicativo Flask
